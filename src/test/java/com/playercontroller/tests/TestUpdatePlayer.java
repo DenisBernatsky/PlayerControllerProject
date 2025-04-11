@@ -51,7 +51,6 @@ public class TestUpdatePlayer extends PlayerCommon {
         Allure.step("Step 4: Retrieve the updated player and check that all fields are updated");
         Response updatedPlayerResponse = playerSteps.get().getPlayerById(createdPlayer.getId());
         assertEquals(updatedPlayerResponse.getStatusCode(), 200, "Expected 200 status code for player update.");
-
         PlayerModel updatedPlayerData = updatedPlayerResponse.as(PlayerModel.class);
 
         SoftAssert softAssert = new SoftAssert();
