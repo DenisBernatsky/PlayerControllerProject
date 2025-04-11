@@ -8,11 +8,11 @@ import io.restassured.response.Response;
 import static org.testng.Assert.assertEquals;
 
 public class PlayerCommon extends BaseTest {
-
+    private final ThreadLocal<PlayerSteps> playerSteps = ThreadLocal.withInitial(() -> new PlayerSteps(spec));
     protected Response createValidPlayer(PlayerModel request, String editor) {
 
         // Make the request and get the response
-        Response apiResponse = new PlayerSteps(spec).createPlayer(editor, request);
+        Response apiResponse = playerSteps.get().createPlayer(editor, request);
 
         // Assert the response status code is 200 (successful creation)
         assertEquals(apiResponse.getStatusCode(), 200, "Expected successful user creation, but got error.");

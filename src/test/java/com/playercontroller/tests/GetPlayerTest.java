@@ -36,7 +36,7 @@ public class GetPlayerTest extends PlayerCommon {
         PlayerModel createdPlayer =  createValidPlayer(request, "supervisor").as(PlayerModel.class);
 
         // Step 2: Retrieve the player data using the player ID
-        Response response = new PlayerSteps(spec).getPlayerById(createdPlayer.getId());
+        Response response = playerSteps.get().getPlayerById(createdPlayer.getId());
 
         assertEquals(response.getStatusCode(), 200, "Expected 200 status code when retrieving player data.");
         assertEquals(response.as(PlayerModel.class), request,"The player data retrieved does not match the player data that was created.");
@@ -52,7 +52,7 @@ public class GetPlayerTest extends PlayerCommon {
         Long invalidPlayerId = 999999999L;
 
         // Step 1: Attempt to retrieve the player data using the invalid player ID
-        Response response = new PlayerSteps(spec).getPlayerById(invalidPlayerId);
+        Response response = playerSteps.get().getPlayerById(invalidPlayerId);
 
         // Assert that the status code is 404 (Not Found) for a non-existent player
         assertEquals(response.getStatusCode(), 404, "Expected 404 status code for non-existent player.");

@@ -40,7 +40,7 @@ public class CreatePlayerTest extends PlayerCommon {
 
         // Make the request and get the response
         String randomRole = List.of("supervisor", "admin").get(new Random().nextInt(2));
-        Response response = new PlayerSteps(spec).createPlayer(randomRole, request);
+        Response response = playerSteps.get().createPlayer(randomRole, request);
 
         // Assert the response status code is 200 (successful creation)
         assertEquals(response.getStatusCode(), 200, "Expected successful user creation, but got error with role: " + randomRole);
@@ -77,7 +77,7 @@ public class CreatePlayerTest extends PlayerCommon {
                 .build();
 
         // Make the request and get response
-        Response response = new PlayerSteps(spec).createPlayer("user", request);
+        Response response = playerSteps.get().createPlayer("user", request);
         assertEquals(response.getStatusCode(), 403, "Expected client error for invalid role.");
     }
 }
