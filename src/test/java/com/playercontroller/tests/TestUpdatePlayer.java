@@ -57,7 +57,7 @@ public class TestUpdatePlayer extends PlayerCommon {
 
         SoftAssert softAssert = new SoftAssert();
         // Validate that the entire updated player model is the same
-        softAssert.assertEquals(updatedPlayerResponse, updatedPlayer, "The updated player data does not match the expected updated data.");
+        softAssert.assertEquals(updatedPlayerData, updatedPlayer, "The updated player data does not match the expected updated data.");
 
         // Also validate that ID is not changed after update
         softAssert.assertEquals(updatedPlayerData.getId(), getPlayerResponse.getId(), "ID should not be null after update.");
