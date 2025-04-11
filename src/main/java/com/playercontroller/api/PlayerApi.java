@@ -1,6 +1,5 @@
 package com.playercontroller.api;
 
-import com.playercontroller.models.ApiResponse;
 import com.playercontroller.models.ErrorResponse;
 import com.playercontroller.models.PlayerModel;
 import io.restassured.response.Response;
@@ -26,9 +25,9 @@ public class PlayerApi {
      * @param request Request body with new player data
      * @return ApiResponse with player data and error messages if any
      */
-    public ApiResponse<PlayerModel> createPlayer(String editor, PlayerModel request) {
+    public Response createPlayer(String editor, PlayerModel request) {
         // Send a GET request with parameters
-        Response response = given()
+        return given()
                 .spec(spec)
                 .param("age", request.getAge())
                 .param("gender", request.getGender())
@@ -38,21 +37,38 @@ public class PlayerApi {
                 .param("screenName", request.getScreenName())
                 .get("/player/create/{editor}", editor);
 
-        // If the status code is in the successful range (2xx)
-        if (response.getStatusCode() >= 200 && response.getStatusCode() < 300) {
-            // Successful response - deserialize to PlayerModel
-            return new ApiResponse<>(response.as(PlayerModel.class), response.getStatusCode(), null);
-        }
+    }
 
-        // If the response body is empty, check the status code and the error
-        if (response.getBody().asString().isEmpty()) {
-            // Return an error with empty content
-            ErrorResponse errorResponse = new ErrorResponse("No content", response.getStatusCode(), "Error", "", "");
-            return new ApiResponse<>(null, response.getStatusCode(), List.of(errorResponse));
-        }
+    /**
+     * Delete an existing player.
+     * Method: DELETE
+     * URL: /player/delete/{editor}
+     * @param editor The login of the user performing the operation (supervisor/admin)
+     * @param playerId The id of the player to be deleted
+     * @return ApiResponse containing the result of the operation
+     */
+    public Response deletePlayer(String editor, Long playerId) {
+        // Send a DELETE request with playerId from the request body
+        return given()
+                .spec(spec)
+                .pathParam("editor", editor)  // Set the editor login (user performing the operation)
+                .body("{\"playerId\": " + playerId + "}")  // Set the request body with playerId
+                .delete("/player/delete/{editor}");
+    }
 
-        // Deserialize the error response
-        ErrorResponse errorResponse = response.as(ErrorResponse.class);
-        return new ApiResponse<>(null, response.getStatusCode(), List.of(errorResponse));
+    /**
+     * Get player details by player ID.
+     * Method: POST
+     * URL: /player/get
+     * @param playerId The ID of the player to fetch details for
+     * @return ApiResponse with player data if successful, or error messages if any
+     */
+    public Response getPlayerById(Long playerId) {
+        // Send POST request with playerId in the body
+        return given()
+                .spec(spec)
+                .body("{\"playerId\": " + playerId + "}")
+                .post("/player/get");
+
     }
 }
