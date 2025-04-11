@@ -7,7 +7,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(exclude = {"id"})
+@EqualsAndHashCode(exclude = "id")
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PlayerModel {
     private int age;
