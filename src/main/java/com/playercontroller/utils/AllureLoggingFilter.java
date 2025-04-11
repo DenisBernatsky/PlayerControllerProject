@@ -10,6 +10,8 @@ import io.restassured.specification.FilterableResponseSpecification;
 
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 public class AllureLoggingFilter implements Filter {
@@ -18,8 +20,14 @@ public class AllureLoggingFilter implements Filter {
     public Response filter(FilterableRequestSpecification requestSpec,
                            FilterableResponseSpecification responseSpec,
                            FilterContext ctx) {
+        // Get the current time in a human-readable format
+        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+
         // String for logging full request and response details
         StringBuilder fullLog = new StringBuilder();
+
+        // Log the current timestamp
+        fullLog.append("Timestamp: ").append(timestamp).append("\n");
 
         // Log request information
         fullLog.append("Request Method: ").append(requestSpec.getMethod()).append("\n");

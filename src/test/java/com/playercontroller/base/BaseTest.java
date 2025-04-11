@@ -23,6 +23,8 @@ public class BaseTest {
                 .setBaseUri(ConfigLoader.getBaseUrl())
                 .setContentType(ContentType.JSON)
                 .addFilter(new AllureLoggingFilter())
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
                 .build();
 
         RestAssured.baseURI = ConfigLoader.getBaseUrl();

@@ -9,6 +9,7 @@ import org.testng.asserts.SoftAssert;
 
 import static com.playercontroller.utils.TestConstants.*;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
 
 @Epic("PlayerController")
 @Feature("Update Player")
@@ -51,6 +52,7 @@ public class TestUpdatePlayer extends PlayerCommon {
         Allure.step("Step 4: Retrieve the updated player and check that all fields are updated");
         Response updatedPlayerResponse = playerSteps.get().getPlayerById(createdPlayer.getId());
         assertEquals(updatedPlayerResponse.getStatusCode(), 200, "Expected 200 status code for player update.");
+        assertFalse(updatedPlayerResponse.getBody().asString().isEmpty(), "Response body is empty but expected player data.");
         PlayerModel updatedPlayerData = updatedPlayerResponse.as(PlayerModel.class);
 
         SoftAssert softAssert = new SoftAssert();

@@ -4,8 +4,6 @@ import com.playercontroller.models.PlayerModel;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
-import java.util.concurrent.TimeUnit;
-
 import static io.restassured.RestAssured.given;
 
 public class PlayerApi {
@@ -66,28 +64,12 @@ public class PlayerApi {
      * @return ApiResponse with player data if successful, or error messages if any
      */
     public Response getPlayerById(Long playerId) {
-        int attempts = 0;
-        Response response = null;
+        // Send POST request with playerId in the body
+        return given()
+                .spec(spec)
+                .body("{\"playerId\": " + playerId + "}")
+                .post("/player/get");
 
-        while (attempts < 3) {
-            response = given()
-                    .spec(spec)
-                    .body("{\"playerId\": " + playerId + "}")
-                    .post("/player/get");
-
-            if (response.getStatusCode() == 200 && !response.getBody().asString().isEmpty()) {
-                break;
-            }
-
-            attempts++;
-            try {
-                TimeUnit.SECONDS.sleep(2);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-        }
-
-        return response;
     }
 
     /**
