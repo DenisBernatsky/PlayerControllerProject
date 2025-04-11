@@ -1,0 +1,13 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="PlayerControllerSuite" parallel="tests" thread-count="3">
+    <test name="Positive Tests">
+        <classes>
+            <class name="com.playercontroller.tests.CreatePlayerTest"/>
+        </classes>
+    </test>
+    <test name="Negative Tests">
+        <classes>
+            <class name="com.playercontroller.tests.CreatePlayerTest"/>
+        </classes>
+    </test>
+</suite>
