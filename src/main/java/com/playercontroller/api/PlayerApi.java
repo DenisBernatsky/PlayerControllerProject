@@ -1,11 +1,8 @@
 package com.playercontroller.api;
 
-import com.playercontroller.models.ErrorResponse;
 import com.playercontroller.models.PlayerModel;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-
-import java.util.List;
 
 import static io.restassured.RestAssured.given;
 
@@ -21,6 +18,7 @@ public class PlayerApi {
      * Create a new player.
      * Method: GET
      * URL: /player/create/{editor}
+     *
      * @param editor  Login of the user performing the operation
      * @param request Request body with new player data
      * @return ApiResponse with player data and error messages if any
@@ -43,7 +41,8 @@ public class PlayerApi {
      * Delete an existing player.
      * Method: DELETE
      * URL: /player/delete/{editor}
-     * @param editor The login of the user performing the operation (supervisor/admin)
+     *
+     * @param editor   The login of the user performing the operation (supervisor/admin)
      * @param playerId The id of the player to be deleted
      * @return ApiResponse containing the result of the operation
      */
@@ -60,6 +59,7 @@ public class PlayerApi {
      * Get player details by player ID.
      * Method: POST
      * URL: /player/get
+     *
      * @param playerId The ID of the player to fetch details for
      * @return ApiResponse with player data if successful, or error messages if any
      */

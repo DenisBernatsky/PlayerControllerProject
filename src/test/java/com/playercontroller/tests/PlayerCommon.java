@@ -8,7 +8,8 @@ import io.restassured.response.Response;
 import static org.testng.Assert.assertEquals;
 
 public class PlayerCommon extends BaseTest {
-    private final ThreadLocal<PlayerSteps> playerSteps = ThreadLocal.withInitial(() -> new PlayerSteps(spec));
+    protected final ThreadLocal<PlayerSteps> playerSteps = ThreadLocal.withInitial(() -> new PlayerSteps(spec));
+
     protected Response createValidPlayer(PlayerModel request, String editor) {
 
         // Make the request and get the response

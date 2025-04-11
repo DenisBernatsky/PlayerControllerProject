@@ -1,18 +1,16 @@
 package com.playercontroller.tests;
 
 import com.playercontroller.models.PlayerModel;
-import com.playercontroller.steps.PlayerSteps;
 import io.qameta.allure.*;
 import io.qameta.allure.testng.Tag;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
-import static io.restassured.RestAssured.given;
 import static org.testng.Assert.assertEquals;
 
 @Epic("PlayerController")
 @Feature("Get Player")
-public class GetPlayerTest extends PlayerCommon {
+public class TestGetPlayer extends PlayerCommon {
 
     @Test(description = "Verify that a valid player can be retrieved successfully")
     @Severity(SeverityLevel.CRITICAL)
@@ -33,13 +31,13 @@ public class GetPlayerTest extends PlayerCommon {
                 .build();
 
         // Step 1: Create a player using the common method
-        PlayerModel createdPlayer =  createValidPlayer(request, "supervisor").as(PlayerModel.class);
+        PlayerModel createdPlayer = createValidPlayer(request, "supervisor").as(PlayerModel.class);
 
         // Step 2: Retrieve the player data using the player ID
         Response response = playerSteps.get().getPlayerById(createdPlayer.getId());
 
         assertEquals(response.getStatusCode(), 200, "Expected 200 status code when retrieving player data.");
-        assertEquals(response.as(PlayerModel.class), request,"The player data retrieved does not match the player data that was created.");
+        assertEquals(response.as(PlayerModel.class), request, "The player data retrieved does not match the player data that was created.");
     }
 
     @Test(description = "Verify that an invalid player cannot be retrieved")

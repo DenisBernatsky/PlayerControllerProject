@@ -1,8 +1,6 @@
 package com.playercontroller.tests;
 
 import com.playercontroller.models.PlayerModel;
-import com.playercontroller.steps.PlayerSteps;
-import groovy.transform.Immutable;
 import io.qameta.allure.*;
 import io.qameta.allure.testng.Tag;
 import io.restassured.response.Response;
@@ -14,11 +12,11 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertEquals;
 
 @Epic("PlayerController")
 @Feature("Create Player")
-public class CreatePlayerTest extends PlayerCommon {
+public class TestCreatePlayer extends PlayerCommon {
 
     @Test(description = "Create a valid user successfully")
     @Severity(SeverityLevel.CRITICAL)

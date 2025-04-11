@@ -2,12 +2,12 @@
 <suite name="PlayerControllerSuite" parallel="tests" thread-count="3">
     <test name="Positive Tests">
         <classes>
-            <class name="com.playercontroller.tests.CreatePlayerTest"/>
+            <class name="com.playercontroller.tests.TestCreatePlayer"/>
         </classes>
     </test>
     <test name="Negative Tests">
         <classes>
-            <class name="com.playercontroller.tests.CreatePlayerTest"/>
+            <class name="com.playercontroller.tests.TestCreatePlayer"/>
         </classes>
     </test>
 </suite>

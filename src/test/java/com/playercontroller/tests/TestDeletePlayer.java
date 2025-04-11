@@ -1,7 +1,6 @@
 package com.playercontroller.tests;
 
 import com.playercontroller.models.PlayerModel;
-import com.playercontroller.steps.PlayerSteps;
 import io.qameta.allure.*;
 import io.qameta.allure.testng.Tag;
 import io.restassured.response.Response;
@@ -11,7 +10,7 @@ import static org.testng.Assert.assertEquals;
 
 @Epic("PlayerController")
 @Feature("Delete Player")
-public class DeletePlayerTest extends PlayerCommon {
+public class TestDeletePlayer extends PlayerCommon {
 
     @Test(description = "Verify that a supervisor can delete a player successfully.")
     @Severity(SeverityLevel.CRITICAL)

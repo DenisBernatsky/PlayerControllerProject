@@ -26,7 +26,8 @@ public class PlayerSteps {
 
     /**
      * Delete an existing player and return the result in ApiResponse
-     * @param editor The login of the user performing the action
+     *
+     * @param editor   The login of the user performing the action
      * @param playerId The id of the player to delete
      * @return ApiResponse containing status and error messages if any
      */
@@ -37,6 +38,7 @@ public class PlayerSteps {
 
     /**
      * Get player details by player ID.
+     *
      * @param playerId The ID of the player to retrieve.
      * @return ApiResponse containing the player details.
      */
