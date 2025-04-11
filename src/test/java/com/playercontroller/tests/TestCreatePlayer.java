@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
+import static com.playercontroller.utils.TestConstants.*;
 import static org.testng.Assert.assertEquals;
 
 @Epic("PlayerController")
@@ -24,36 +25,29 @@ public class TestCreatePlayer extends PlayerCommon {
     @Tag("positive")
     public void createValidUserTest() {
 
-        // Create a request with valid data
+        Allure.step("Step 1: Generate valid user data");
         String suffix = String.valueOf(System.currentTimeMillis());
-        String randomGender = List.of("male", "female").get(new Random().nextInt(2));
+        String randomGender = List.of(GENDER_MALE, GENDER_FEMALE).get(new Random().nextInt(2));
         PlayerModel request = PlayerModel.builder()
                 .age(ThreadLocalRandom.current().nextInt(17, 60))
                 .gender(randomGender)
-                .login("user" + ThreadLocalRandom.current().nextInt(1000, 9999))
+                .login(USER + ThreadLocalRandom.current().nextInt(1000, 9999))
                 .password(RandomStringUtils.randomAlphanumeric(8, 15))
-                .role("user")
+                .role(USER)
                 .screenName("validScreen_" + suffix)
                 .build();
 
-        // Make the request and get the response
-        String randomRole = List.of("supervisor", "admin").get(new Random().nextInt(2));
+        Allure.step("Step 2: Create the player with the generated data");
+        String randomRole = List.of(SUPERVISOR, ADMIN).get(new Random().nextInt(2));
         Response response = playerSteps.get().createPlayer(randomRole, request);
 
-        // Assert the response status code is 200 (successful creation)
+        Allure.step("Step 3: Assert response status and validate created player data");
         assertEquals(response.getStatusCode(), 200, "Expected successful user creation, but got error with role: " + randomRole);
         PlayerModel responseModel = response.as(PlayerModel.class);
 
-        // Initialize soft assert for detailed field comparison
         SoftAssert softAssert = new SoftAssert();
-
-        // Compare entire models (ignoring 'id' field)
         softAssert.assertEquals(responseModel, request, "The created player data does not match the request data.");
-
-        // Check that 'id' is not null in the response (should be generated after successful creation)
         softAssert.assertNotNull(responseModel.getId(), "ID should not be null after user creation.");
-
-        // Call assertAll() to verify all soft assertions
         softAssert.assertAll();
     }
 
@@ -62,20 +56,22 @@ public class TestCreatePlayer extends PlayerCommon {
     @Description("Verify that a user with a role other than 'supervisor' or 'admin' cannot be created.")
     @Tag("negative")
     public void createUserWithInvalidRoleTest() {
-        String suffix = String.valueOf(System.currentTimeMillis());
 
-        // Create a request with an invalid role
+        Allure.step("Step 1: Create a request with an invalid role");
+        String suffix = String.valueOf(System.currentTimeMillis());
         PlayerModel request = PlayerModel.builder()
                 .age(25)
-                .gender("male")
+                .gender(GENDER_MALE)
                 .login("invalidRoleUser_" + suffix)
                 .password("Pass1234")
-                .role("user")
+                .role(USER)
                 .screenName("invalidRoleScreen_" + suffix)
                 .build();
 
-        // Make the request and get response
-        Response response = playerSteps.get().createPlayer("user", request);
+        Allure.step("Step 2: Make the request and validate response");
+        Response response = playerSteps.get().createPlayer(USER, request);
+
+        Allure.step("Step 3: Assert response status for invalid role");
         assertEquals(response.getStatusCode(), 403, "Expected client error for invalid role.");
     }
 }

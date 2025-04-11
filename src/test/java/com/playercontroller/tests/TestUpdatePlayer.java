@@ -7,6 +7,7 @@ import io.restassured.response.Response;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
+import static com.playercontroller.utils.TestConstants.*;
 import static org.testng.Assert.assertEquals;
 
 @Epic("PlayerController")
@@ -18,48 +19,43 @@ public class TestUpdatePlayer extends PlayerCommon {
     @Description("Ensure that a supervisor can update a player’s data with all available fields (age, gender, login, password, screenName).")
     @Tag("positive")
     public void updatePlayerTest() {
-        String suffix = String.valueOf(System.currentTimeMillis());
 
-        // Step 1: Create a valid player
+        Allure.step("Step 1: Create a valid player");
+        String suffix = String.valueOf(System.currentTimeMillis());
         PlayerModel request = PlayerModel.builder()
                 .age(25)
-                .gender("male")
+                .gender(GENDER_MALE)
                 .login("validUser_" + suffix)
                 .password("Pass1234")
-                .role("user")
+                .role(USER)
                 .screenName("validScreen_" + suffix)
                 .build();
 
-        PlayerModel createdPlayer = createValidPlayer(request, "supervisor").as(PlayerModel.class);
+        PlayerModel createdPlayer = createValidPlayer(request, SUPERVISOR).as(PlayerModel.class);
         PlayerModel getPlayerResponse = playerSteps.get().getPlayerById(createdPlayer.getId()).as(PlayerModel.class);
 
-        // Step 2: Prepare data for update (change all fields)
+        Allure.step("Step 2: Prepare data for update (change all fields)");
         PlayerModel updatedPlayer = PlayerModel.builder()
                 .age(30)
-                .gender("female")
+                .gender(GENDER_FEMALE)
                 .login("updatedUser_" + suffix)
                 .password("UpdatedPassword123")
-                .role("admin")
+                .role(ADMIN)
                 .screenName("updatedScreen_" + suffix)
                 .build();
 
-        // Step 3: Update the player with new data
-        Response updateResponse = playerSteps.get().updatePlayer("supervisor", createdPlayer.getId(), updatedPlayer);
-
-        // Assert that the status code is 200 for successful update
+        Allure.step("Step 3: Update the player with new data");
+        Response updateResponse = playerSteps.get().updatePlayer(SUPERVISOR, createdPlayer.getId(), updatedPlayer);
         assertEquals(updateResponse.getStatusCode(), 200, "Expected 200 status code for player update.");
 
-        // Step 4: Retrieve the updated player and check that all fields are updated
+        Allure.step("Step 4: Retrieve the updated player and check that all fields are updated");
         Response updatedPlayerResponse = playerSteps.get().getPlayerById(createdPlayer.getId());
         assertEquals(updatedPlayerResponse.getStatusCode(), 200, "Expected 200 status code for player update.");
 
         PlayerModel updatedPlayerData = updatedPlayerResponse.as(PlayerModel.class);
 
         SoftAssert softAssert = new SoftAssert();
-        // Validate that the entire updated player model is the same
         softAssert.assertEquals(updatedPlayerData, updatedPlayer, "The updated player data does not match the expected updated data.");
-
-        // Also validate that ID is not changed after update
         softAssert.assertEquals(updatedPlayerData.getId(), getPlayerResponse.getId(), "ID should not be null after update.");
         softAssert.assertAll();
     }
@@ -70,75 +66,71 @@ public class TestUpdatePlayer extends PlayerCommon {
     @Tag("negative")
     public void updatePlayerWithInvalidDataTest() {
 
-        // Step 1: Create a valid player
+        Allure.step("Step 1: Create a valid player");
         String suffix = String.valueOf(System.currentTimeMillis());
         PlayerModel validPlayer = PlayerModel.builder()
                 .age(25)
-                .gender("male")
+                .gender(GENDER_MALE)
                 .login("validLogin_" + suffix)
                 .password("ValidPass123")
-                .role("admin")
+                .role(ADMIN)
                 .screenName("validScreen_" + suffix)
                 .build();
 
-        PlayerModel createdPlayer = createValidPlayer(validPlayer, "supervisor").as(PlayerModel.class);
-
-        // Initialize soft assert for detailed field comparison
+        PlayerModel createdPlayer = createValidPlayer(validPlayer, SUPERVISOR).as(PlayerModel.class);
         SoftAssert softAssert = new SoftAssert();
 
-        // Step 2: Try to update with invalid age (less than 16)
+        Allure.step("Step 2: Try to update with invalid age (less than 16)");
         PlayerModel invalidAgePlayer = PlayerModel.builder()
                 .age(15)  // Invalid age (too young)
-                .gender("male")
+                .gender(GENDER_MALE)
                 .login(createdPlayer.getLogin())
                 .password("ValidPass123")
-                .role("admin")
+                .role(ADMIN)
                 .screenName(createdPlayer.getScreenName())
                 .build();
 
-        Response responseAge = playerSteps.get().updatePlayer("supervisor", createdPlayer.getId(), invalidAgePlayer);
+        Response responseAge = playerSteps.get().updatePlayer(SUPERVISOR, createdPlayer.getId(), invalidAgePlayer);
         softAssert.assertEquals(responseAge.getStatusCode(), 400, "Expected error for invalid age.");
 
-        // Step 3: Try to update with invalid role (not 'supervisor' or 'admin')
+        Allure.step("Step 3: Try to update with invalid role (not 'supervisor' or 'admin')");
         PlayerModel invalidRolePlayer = PlayerModel.builder()
                 .age(25)
-                .gender("male")
+                .gender(GENDER_MALE)
                 .login(createdPlayer.getLogin())
                 .password("ValidPass123")
-                .role("moderator")  // Invalid role
+                .role(ROLE_INVALID)  // Invalid role
                 .screenName(createdPlayer.getScreenName())
                 .build();
 
-        Response responseRole = playerSteps.get().updatePlayer("supervisor", createdPlayer.getId(), invalidRolePlayer);
+        Response responseRole = playerSteps.get().updatePlayer(SUPERVISOR, createdPlayer.getId(), invalidRolePlayer);
         softAssert.assertEquals(responseRole.getStatusCode(), 403, "Expected error for invalid role.");
 
-        // Step 4: Try to update with invalid gender (not 'male' or 'female')
+        Allure.step("Step 4: Try to update with invalid gender (not 'male' or 'female')");
         PlayerModel invalidGenderPlayer = PlayerModel.builder()
                 .age(25)
                 .gender("other")  // Invalid gender
                 .login(createdPlayer.getLogin())
                 .password("ValidPass123")
-                .role("admin")
+                .role(ADMIN)
                 .screenName(createdPlayer.getScreenName())
                 .build();
 
-        Response responseGender = playerSteps.get().updatePlayer("supervisor", createdPlayer.getId(), invalidGenderPlayer);
+        Response responseGender = playerSteps.get().updatePlayer(SUPERVISOR, createdPlayer.getId(), invalidGenderPlayer);
         softAssert.assertEquals(responseGender.getStatusCode(), 400, "Expected error for invalid gender.");
 
-        // Step 5: Try to update with invalid password (too short)
+        Allure.step("Step 5: Try to update with invalid password (too short)");
         PlayerModel invalidPasswordPlayer = PlayerModel.builder()
                 .age(25)
-                .gender("male")
+                .gender(GENDER_MALE)
                 .login(createdPlayer.getLogin())
                 .password("123")  // Invalid password (too short)
-                .role("admin")
+                .role(ADMIN)
                 .screenName(createdPlayer.getScreenName())
                 .build();
 
-        Response responsePassword = playerSteps.get().updatePlayer("supervisor", createdPlayer.getId(), invalidPasswordPlayer);
+        Response responsePassword = playerSteps.get().updatePlayer(SUPERVISOR, createdPlayer.getId(), invalidPasswordPlayer);
         softAssert.assertEquals(responsePassword.getStatusCode(), 400, "Expected error for invalid password.");
-
-        // Call assertAll() to verify all soft assertions
         softAssert.assertAll();
     }
 }

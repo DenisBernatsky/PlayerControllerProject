@@ -5,6 +5,7 @@ import com.playercontroller.models.PlayerModel;
 import com.playercontroller.steps.PlayerSteps;
 import io.restassured.response.Response;
 
+import static com.playercontroller.utils.TestConstants.*;
 import static org.testng.Assert.assertEquals;
 
 public class PlayerCommon extends BaseTest {
@@ -26,12 +27,12 @@ public class PlayerCommon extends BaseTest {
         // Create a request with valid data
         PlayerModel request = PlayerModel.builder()
                 .age(25)
-                .gender("male")
+                .gender(GENDER_MALE)
                 .login("validUser_" + suffix)
                 .password("Pass1234")
-                .role("admin")
+                .role(ADMIN)
                 .screenName("validScreen_" + suffix)
                 .build();
-        return createValidPlayer(request, "supervisor");
+        return createValidPlayer(request, SUPERVISOR);
     }
 }

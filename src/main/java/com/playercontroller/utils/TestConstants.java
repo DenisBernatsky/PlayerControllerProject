@@ -10,14 +10,7 @@ public class TestConstants {
 
     public static final String ROLE_INVALID = "moderator";
 
-    public static final int AGE_VALID = 25;
-    public static final int AGE_INVALID = 12;
-
-    public static final int STATUS_OK = 200;
-    public static final int STATUS_CLIENT_ERROR_MIN = 400;
-    public static final int STATUS_CLIENT_ERROR_MAX = 499;
-
-    public static final int NON_EXISTENT_PLAYER_ID = 999999;
+    public static final long NON_EXISTENT_PLAYER_ID = 999999999L;
 
     private TestConstants() {
     }

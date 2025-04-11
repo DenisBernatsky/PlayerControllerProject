@@ -6,6 +6,7 @@ import io.qameta.allure.testng.Tag;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
+import static com.playercontroller.utils.TestConstants.*;
 import static org.testng.Assert.assertEquals;
 
 @Epic("PlayerController")
@@ -20,22 +21,23 @@ public class TestGetPlayer extends PlayerCommon {
 
         String suffix = String.valueOf(System.currentTimeMillis());
 
-        //Create a player
+        // Create a player
         PlayerModel request = PlayerModel.builder()
                 .age(25)
-                .gender("male")
-                .login("validUser_" + suffix)  // Unique login
+                .gender(GENDER_MALE)
+                .login("validUser_" + suffix)
                 .password("Pass1234")
-                .role("admin")
-                .screenName("validScreen_" + suffix)  // Unique screenName
+                .role(ADMIN)
+                .screenName("validScreen_" + suffix)
                 .build();
 
-        // Step 1: Create a player using the common method
-        PlayerModel createdPlayer = createValidPlayer(request, "supervisor").as(PlayerModel.class);
+        Allure.step("Step 1: Create a valid player");
+        PlayerModel createdPlayer = createValidPlayer(request, SUPERVISOR).as(PlayerModel.class);
 
-        // Step 2: Retrieve the player data using the player ID
+        Allure.step("Step 2: Retrieve the player data using the player ID");
         Response response = playerSteps.get().getPlayerById(createdPlayer.getId());
 
+        Allure.step("Step 3: Assert the response status code is 200 and data matches.");
         assertEquals(response.getStatusCode(), 200, "Expected 200 status code when retrieving player data.");
         assertEquals(response.as(PlayerModel.class), request, "The player data retrieved does not match the player data that was created.");
     }
@@ -46,13 +48,10 @@ public class TestGetPlayer extends PlayerCommon {
     @Tag("negative")
     public void retrieveInvalidPlayerTest() {
 
-        // Use a non-existent player ID
-        Long invalidPlayerId = 999999999L;
+        Allure.step("Step 1: Attempt to retrieve the player data using the invalid player ID");
+        Response response = playerSteps.get().getPlayerById(NON_EXISTENT_PLAYER_ID);
 
-        // Step 1: Attempt to retrieve the player data using the invalid player ID
-        Response response = playerSteps.get().getPlayerById(invalidPlayerId);
-
-        // Assert that the status code is 404 (Not Found) for a non-existent player
+        Allure.step("Step 2: Assert the response status code is 404");
         assertEquals(response.getStatusCode(), 404, "Expected 404 status code for non-existent player.");
     }
 }
