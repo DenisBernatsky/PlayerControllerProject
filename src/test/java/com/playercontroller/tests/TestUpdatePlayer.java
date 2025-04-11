@@ -32,6 +32,7 @@ public class TestUpdatePlayer extends PlayerCommon {
 
         PlayerModel createdPlayer = createValidPlayer(request, "supervisor").as(PlayerModel.class);
         PlayerModel getPlayerResponse = playerSteps.get().getPlayerById(createdPlayer.getId()).as(PlayerModel.class);
+
         // Step 2: Prepare data for update (change all fields)
         PlayerModel updatedPlayer = PlayerModel.builder()
                 .age(30)
@@ -49,14 +50,17 @@ public class TestUpdatePlayer extends PlayerCommon {
         assertEquals(updateResponse.getStatusCode(), 200, "Expected 200 status code for player update.");
 
         // Step 4: Retrieve the updated player and check that all fields are updated
-        PlayerModel updatedPlayerResponse = playerSteps.get().getPlayerById(createdPlayer.getId()).as(PlayerModel.class);
+        Response updatedPlayerResponse = playerSteps.get().getPlayerById(createdPlayer.getId());
+        assertEquals(updatedPlayerResponse.getStatusCode(), 200, "Expected 200 status code for player update.");
+
+        PlayerModel updatedPlayerData = updatedPlayerResponse.as(PlayerModel.class);
 
         SoftAssert softAssert = new SoftAssert();
         // Validate that the entire updated player model is the same
         softAssert.assertEquals(updatedPlayerResponse, updatedPlayer, "The updated player data does not match the expected updated data.");
 
         // Also validate that ID is not changed after update
-        softAssert.assertEquals(updatedPlayerResponse.getId(), getPlayerResponse.getId(), "ID should not be null after update.");
+        softAssert.assertEquals(updatedPlayerData.getId(), getPlayerResponse.getId(), "ID should not be null after update.");
         softAssert.assertAll();
     }
 
