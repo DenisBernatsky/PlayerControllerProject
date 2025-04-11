@@ -1,13 +1,23 @@
-<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
-<suite name="PlayerControllerSuite" parallel="tests" thread-count="3">
-    <test name="Positive Tests">
+<?xml version="1.0" encoding="UTF-8"?>
+<suite name="PlayerController Tests Suite" parallel="tests" thread-count="3">
+    <test name="CreatePlayerTests">
         <classes>
             <class name="com.playercontroller.tests.TestCreatePlayer"/>
         </classes>
     </test>
-    <test name="Negative Tests">
+    <test name="DeletePlayerTests">
         <classes>
-            <class name="com.playercontroller.tests.TestCreatePlayer"/>
+            <class name="com.playercontroller.tests.TestDeletePlayer"/>
+        </classes>
+    </test>
+    <test name="UpdatePlayerTests">
+        <classes>
+            <class name="com.playercontroller.tests.TestUpdatePlayer"/>
+        </classes>
+    </test>
+    <test name="GetPlayerTests">
+        <classes>
+            <class name="com.playercontroller.tests.TestGetPlayer"/>
         </classes>
     </test>
 </suite>
