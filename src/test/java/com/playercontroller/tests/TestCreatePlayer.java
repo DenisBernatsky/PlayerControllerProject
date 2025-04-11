@@ -58,7 +58,7 @@ public class TestCreatePlayer extends PlayerCommon {
     }
 
     @Test(description = "Verify that a user with an invalid role cannot be created")
-    @Severity(SeverityLevel.CRITICAL)
+    @Severity(SeverityLevel.NORMAL)
     @Description("Verify that a user with a role other than 'supervisor' or 'admin' cannot be created.")
     @Tag("negative")
     public void createUserWithInvalidRoleTest() {
