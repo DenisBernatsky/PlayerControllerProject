@@ -45,4 +45,17 @@ public class PlayerSteps {
     public Response getPlayerById(Long playerId) {
         return playerApi.getPlayerById(playerId);
     }
+
+
+    /**
+     * Update an existing player's details.
+     *
+     * @param editor  The login of the user performing the action
+     * @param id      The ID of the player to update
+     * @param request The player update data
+     * @return ApiResponse containing the updated player data or error messages
+     */
+    public Response updatePlayer(String editor, Long id, PlayerModel request) {
+        return playerApi.updatePlayer(editor, id, request);
+    }
 }

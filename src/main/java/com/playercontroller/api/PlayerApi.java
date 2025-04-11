@@ -71,4 +71,24 @@ public class PlayerApi {
                 .post("/player/get");
 
     }
+
+    /**
+     * Update player details.
+     * Method: PATCH
+     * URL: /player/update/{editor}/{id}
+     *
+     * @param editor  Login of the user performing the operation (supervisor/admin)
+     * @param id      The ID of the player to update
+     * @param request The player update data
+     * @return ApiResponse with updated player data if successful, or error messages if any
+     */
+    public Response updatePlayer(String editor, Long id, PlayerModel request) {
+        // Send PATCH request with playerId in the path and update data in the body
+        return given()
+                .spec(spec)
+                .pathParam("editor", editor)
+                .pathParam("id", id)
+                .body(request)
+                .patch("/player/update/{editor}/{id}");
+    }
 }
