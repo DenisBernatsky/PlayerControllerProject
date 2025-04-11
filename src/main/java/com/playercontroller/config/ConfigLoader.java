@@ -18,7 +18,4 @@ public class ConfigLoader {
         return System.getProperty("base.url", props.getProperty("base.url"));
     }
 
-    public static int getThreadCount() {
-        return Integer.parseInt(System.getProperty("thread.count", props.getProperty("thread.count", "1")));
-    }
 }

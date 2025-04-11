@@ -18,26 +18,29 @@ public class AllureLoggingFilter implements Filter {
     public Response filter(FilterableRequestSpecification requestSpec,
                            FilterableResponseSpecification responseSpec,
                            FilterContext ctx) {
-        // Строка для логирования полного запроса и ответа
+        // String for logging full request and response details
         StringBuilder fullLog = new StringBuilder();
 
-        // Логирование информации о запросе
+        // Log request information
         fullLog.append("Request Method: ").append(requestSpec.getMethod()).append("\n");
         fullLog.append("Request URI: ").append(requestSpec.getURI()).append("\n");
         fullLog.append("Request Headers: ").append(requestSpec.getHeaders()).append("\n");
         fullLog.append("Request Parameters: ").append(requestSpec.getQueryParams()).append("\n");
-        fullLog.append("Request Body: ").append(Optional.ofNullable(requestSpec.getBody())).append("\n");
+
+        // Checking if the request body is present, as it may not always be provided
+        String body = Optional.ofNullable(requestSpec.getBody()).map(String::valueOf).orElse("No body content");
+        fullLog.append("Request Body: ").append(body).append("\n");
         fullLog.append("-------------------------------------------------\n");
 
-        // Выполнение запроса
+        // Execute the request
         Response response = ctx.next(requestSpec, responseSpec);
 
-        // Логирование информации о ответе
+        // Log response information
         fullLog.append("Response Status Code: ").append(response.getStatusCode()).append("\n");
         fullLog.append("Response Headers: ").append(response.getHeaders()).append("\n");
         fullLog.append("Response Body: ").append(response.getBody().asString()).append("\n");
 
-        // Добавляем весь лог в отчет Allure как одно вложение
+        // Add the full log as a single attachment in Allure report
         Allure.addAttachment("Request and Response Log", "text/plain",
                 new ByteArrayInputStream(fullLog.toString().getBytes(StandardCharsets.UTF_8)),
                 "txt");

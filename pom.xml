@@ -100,7 +100,7 @@
                         <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
                     </suiteXmlFiles>
                     <parallel>tests</parallel>
-                    <threadCount>3</threadCount>
+                    <threadCount>${thread.count}</threadCount>
                 </configuration>
             </plugin>
             <plugin>
