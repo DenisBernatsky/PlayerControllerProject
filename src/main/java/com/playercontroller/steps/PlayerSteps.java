@@ -7,11 +7,7 @@ import io.restassured.specification.RequestSpecification;
 
 public class PlayerSteps {
 
-    private final PlayerApi playerApi;
-
-    public PlayerSteps(RequestSpecification spec) {
-        this.playerApi = new PlayerApi(spec);
-    }
+    private final PlayerApi playerApi = new PlayerApi();
 
     /**
      * Create a new player and return the player data as PlayerModel model

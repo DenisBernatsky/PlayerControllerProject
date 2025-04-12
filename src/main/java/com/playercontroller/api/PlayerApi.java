@@ -1,18 +1,12 @@
 package com.playercontroller.api;
 
 import com.playercontroller.models.PlayerModel;
+import com.playercontroller.utils.Specifications;
 import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
 
 import static io.restassured.RestAssured.given;
 
 public class PlayerApi {
-
-    private final RequestSpecification spec;
-
-    public PlayerApi(RequestSpecification spec) {
-        this.spec = spec;
-    }
 
     /**
      * Create a new player.
@@ -24,17 +18,16 @@ public class PlayerApi {
      * @return ApiResponse with player data and error messages if any
      */
     public Response createPlayer(String editor, PlayerModel request) {
-        // Send a GET request with parameters
         return given()
-                .spec(spec)
+                .spec(Specifications.getSpec())
+                .pathParam("editor", editor)
                 .param("age", request.getAge())
                 .param("gender", request.getGender())
                 .param("login", request.getLogin())
                 .param("password", request.getPassword())
                 .param("role", request.getRole())
                 .param("screenName", request.getScreenName())
-                .get("/player/create/{editor}", editor);
-
+                .get("/player/create/{editor}");
     }
 
     /**
@@ -47,11 +40,10 @@ public class PlayerApi {
      * @return ApiResponse containing the result of the operation
      */
     public Response deletePlayer(String editor, Long playerId) {
-        // Send a DELETE request with playerId from the request body
         return given()
-                .spec(spec)
-                .pathParam("editor", editor)  // Set the editor login (user performing the operation)
-                .body("{\"playerId\": " + playerId + "}")  // Set the request body with playerId
+                .spec(Specifications.getSpec())
+                .pathParam("editor", editor)
+                .body("{\"playerId\": " + playerId + "}")
                 .delete("/player/delete/{editor}");
     }
 
@@ -64,12 +56,10 @@ public class PlayerApi {
      * @return ApiResponse with player data if successful, or error messages if any
      */
     public Response getPlayerById(Long playerId) {
-        // Send POST request with playerId in the body
         return given()
-                .spec(spec)
+                .spec(Specifications.getSpec())
                 .body("{\"playerId\": " + playerId + "}")
                 .post("/player/get");
-
     }
 
     /**
@@ -83,9 +73,8 @@ public class PlayerApi {
      * @return ApiResponse with updated player data if successful, or error messages if any
      */
     public Response updatePlayer(String editor, Long id, PlayerModel request) {
-        // Send PATCH request with playerId in the path and update data in the body
         return given()
-                .spec(spec)
+                .spec(Specifications.getSpec())
                 .pathParam("editor", editor)
                 .pathParam("id", id)
                 .body(request)

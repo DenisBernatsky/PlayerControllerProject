@@ -9,7 +9,7 @@ import static com.playercontroller.utils.TestConstants.*;
 import static org.testng.Assert.assertEquals;
 
 public class PlayerCommon extends BaseTest {
-    protected final ThreadLocal<PlayerSteps> playerSteps = ThreadLocal.withInitial(() -> new PlayerSteps(spec));
+    protected final ThreadLocal<PlayerSteps> playerSteps = ThreadLocal.withInitial(PlayerSteps::new);
 
     protected Response createValidPlayer(PlayerModel request, String editor) {
 
