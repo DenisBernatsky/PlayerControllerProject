@@ -134,4 +134,46 @@ public class TestUpdatePlayer extends PlayerCommon {
         softAssert.assertEquals(responsePassword.getStatusCode(), 400, "Expected error for invalid password.");
         softAssert.assertAll();
     }
+
+    @Test(description = "Verify that a user cannot update another player")
+    @Severity(SeverityLevel.CRITICAL)
+    @Description("Ensure that a user role does not have permission to update other users' data.")
+    @Tag("negative")
+    public void userCannotUpdateAnotherPlayerTest() {
+
+        String suffix = String.valueOf(System.currentTimeMillis());
+        PlayerModel validPlayer = PlayerModel.builder()
+                .age(25)
+                .gender(GENDER_MALE)
+                .login("validLogin_" + suffix)
+                .password("ValidPass123")
+                .role(ADMIN)
+                .screenName("validScreen_" + suffix)
+                .build();
+
+        Allure.step("Step 1: Create a valid player by supervisor");
+        PlayerModel playerToBeUpdated = createValidPlayer(validPlayer, SUPERVISOR).as(PlayerModel.class);
+
+        Allure.step("Step 2: Prepare update data");
+        PlayerModel updatedPlayerData = PlayerModel.builder()
+                .age(30)
+                .gender(GENDER_FEMALE)
+                .login(playerToBeUpdated.getLogin())
+                .password("UpdatedPass123")
+                .role(USER)
+                .screenName(playerToBeUpdated.getScreenName())
+                .build();
+
+        Allure.step("Step 3: Attempt to update the player using USER role as editor");
+        Response response = playerSteps.get().updatePlayer(USER, playerToBeUpdated.getId(), updatedPlayerData);
+
+        Allure.step("Step 4: Validate that the update is forbidden");
+        assertEquals(response.getStatusCode(), 403, "User should not be allowed to update another player's data (403 Forbidden)." );
+
+        Allure.step("Step 5: Retrieve the player to verify that the data was not changed");
+        Response getResponse = playerSteps.get().getPlayerById(playerToBeUpdated.getId());
+        PlayerModel actualPlayer = getResponse.as(PlayerModel.class);
+
+        assertEquals(validPlayer, actualPlayer, "The created player data does not match the request data.");
+    }
 }
